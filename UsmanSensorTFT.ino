@@ -19,7 +19,7 @@ float oldPress = 105;
 float oldGas = 105;
 float oldAltitude = 105;
 
-const char* matrikelnummerData = "1776";
+const char* matrikelnummerData = "";  //Pleas add your Matrikelnumber, char somehow needs to be number not a string
 
 Adafruit_BME680 bme;
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
