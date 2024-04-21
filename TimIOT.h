@@ -36,7 +36,6 @@ const char topicTemp[] = "stat/ua-sensor0X/temperature";   // Temperature
 const char topicHum[] = "stat/ua-sensor0X/humidity";       // Humidity
 const char topicPress[] = "stat/ua-sensor0X/pressure";     // Air Pressure
 const char topicGas[] = "stat/ua-sensor0X/gasResistance";  //
-const char topicAltitude[] = "stat/ua-sensor0X/altitude"; 
 
 const char topicMatrikelnummer[] = "stat/ua-sensor0X/matrikelnummer";  // Matrikelnummer 
 
