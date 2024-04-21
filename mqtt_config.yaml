@@ -29,10 +29,3 @@
       state_topic: "stat/ua-sensor0x/matrikelnummer"
       # friendly_name: "UA-Sensor IAQ"
       unit_of_measurement: ":Matrikelnummer"
-
-
-  
-# add "mqtt: !include mqtt_config.yaml" to your main 'config.yaml' in Home Assistant
-# then add this file to the same directory as the 'config.yaml'
-# then fully restart your HA.
-# your HA only needs to be rebooted once after that you can just reload the yaml configs in "developer settings"
