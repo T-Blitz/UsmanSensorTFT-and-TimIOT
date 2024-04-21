@@ -47,6 +47,12 @@ void setup() {
    TimIOT_MQTT_setupMQTT();
 
   TimIOT_MQTT_sendMatrikelnummerToHASS(matrikelnummerData, topicMatrikelnummer);
+  
+  //Set Oversampling and filter settings
+  bme.setTemperatureOversampling(BME680_OS_8X);
+  bme.setHumidityOversampling(BME680_OS_2X);
+  bme.setPressureOversampling(BME680_OS_4X);
+  bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
 }
 
 
@@ -62,9 +68,6 @@ void loop() {
     // Activate the heater
   bme.performReading();
   bme.setGasHeater(320, 150);
-
-  // Deactivate the heater after reading
-  bme.setGasHeater(0, 0);
 
   float temperature = bme.readTemperature();
   float humidity = bme.readHumidity();
