@@ -17,9 +17,8 @@ float oldTemp = 105;
 float oldHum = 105;
 float oldPress = 105;
 float oldGas = 105;
-float oldAltitude = 105;
 
-const char* matrikelnummerData = "1776";
+const char* matrikelnummerData = "";  //Pleas add your Matrikelnumber, char somehow needs to be number not a string
 
 Adafruit_BME680 bme;
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
@@ -44,7 +43,7 @@ void setup() {
   TimIOT_WiFi_setupWifi();
 
   // Setting up and connecting to MQTT, using "TimIOT.h"
-   TimIOT_MQTT_setupMQTT();
+  TimIOT_MQTT_setupMQTT();
 
   TimIOT_MQTT_sendMatrikelnummerToHASS(matrikelnummerData, topicMatrikelnummer);
   
@@ -102,13 +101,8 @@ void loop() {
     oldGas = gasResistance;
     TimIOT_MQTT_sendDataToHASS(gasResistance, topicGas);
   }
-  if (oldAltitude != altitude) {
-    // save the last time a message was sent
-    oldAltitude = altitude;
-    TimIOT_MQTT_sendDataToHASS(altitude, topicAltitude);
-  }
 
-
+  
   // Print to Serial Monitor
   Serial.print("Temperature: ");
   Serial.print(temperature);
