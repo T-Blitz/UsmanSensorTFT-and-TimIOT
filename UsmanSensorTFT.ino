@@ -102,12 +102,6 @@ void loop() {
     oldGas = gasResistance;
     TimIOT_MQTT_sendDataToHASS(gasResistance, topicGas);
   }
-  if (oldAltitude != altitude) {
-    // save the last time a message was sent
-    oldAltitude = altitude;
-    TimIOT_MQTT_sendDataToHASS(altitude, topicAltitude);
-  }
-
 
   // Print to Serial Monitor
   Serial.print("Temperature: ");
