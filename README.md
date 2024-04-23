@@ -15,6 +15,7 @@ Presetup:
 	Add "mqtt: !include mqtt_config.yaml" to your main 'config.yaml' in 
 	Home Assistant, fully restart your HA.
 	Your HA only needs to be rebooted ONCE after that you can just reload 
-	the yaml configs in developer settings
+	the yaml configs in developer settings.
 	
-
+	Before uploading the code to your Arduino, make sure that the 
+	"Secrets.h" has your wifi information and your mqtt user + pw.
