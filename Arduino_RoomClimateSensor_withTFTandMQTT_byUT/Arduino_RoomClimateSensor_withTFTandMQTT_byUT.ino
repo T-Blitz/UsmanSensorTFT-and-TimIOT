@@ -52,6 +52,7 @@ void setup() {
   bme.setHumidityOversampling(BME680_OS_2X);
   bme.setPressureOversampling(BME680_OS_4X);
   bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
+  bme.setGasHeater(320, 150);
 }
 
 
@@ -66,12 +67,11 @@ void loop() {
 
     // Activate the heater
   bme.performReading();
-  bme.setGasHeater(320, 150);
 
   float temperature = bme.readTemperature();
   float humidity = bme.readHumidity();
   float pressure = bme.readPressure() / 100.0;  // Convert to hPa
-  float altitude = bme.readAltitude(SENSORS_PRESSURE_SEALEVELHPA);
+  float altitude = bme.readAltitude(800);
   // Convert to KOhms, later known as "voc" 
   float gasResistance = bme.readGas() / 100.0;  
 
@@ -118,7 +118,7 @@ void loop() {
 
 
   // Adjust delay as needed
-  delay(500);  
+  delay(5000);  
 }
 
 
