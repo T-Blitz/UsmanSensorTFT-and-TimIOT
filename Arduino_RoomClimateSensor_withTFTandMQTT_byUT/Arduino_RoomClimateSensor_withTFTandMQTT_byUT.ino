@@ -31,6 +31,7 @@ void setup() {
   TimIOT_MQTT_setupMQTT();
 
   TimIOT_MQTT_sendMatrikelnummerToHASS(matrikelnummerData, topicMatrikelnummer);
+}
 
 //    Void Loop here   //
 void loop() {
