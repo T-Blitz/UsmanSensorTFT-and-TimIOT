@@ -97,5 +97,5 @@ void loop() {
 
 
   // Adjust delay as needed
-  delay(500);  
+  delay(5000);  
 }
