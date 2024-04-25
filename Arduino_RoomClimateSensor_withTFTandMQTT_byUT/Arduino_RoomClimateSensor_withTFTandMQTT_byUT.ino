@@ -42,54 +42,55 @@ void loop() {
   TimIOT_WiFi_keepAlive();
   TimIOT_MQTT_keepAlive();
 
-  // reads the current Room Climate and Activate the heater
-  UsmanBME_readAndClean();
+  // reads the current Room Climate and passes them in to a struct
+  // using the struct "SensorDataBME", declared in UsmanBME.h for simple usage of data
+  SensorDataBME resultBME = UsmanBME_ReadingBME();
 
 
   // get The newly read Climate data and passes them in main loop
-  float temperature = UsmanBME_temperature;
-  float humidity = UsmanBME_humidity;
-  float pressure = UsmanBME_pressure;
-  float altitude = UsmanBME_altitude;
-  float gasResistance = UsmanBME_gasResistance;
+  // leaving them for now, even though they are not needed anymore, since we can just use the struct
+  //float temperature = resultBME.temperature;
+  //float humidity = resultBME.humidity;
+  //float pressure = resultBME.pressure;
+  //float altitude = resultBME.altitude;
+  //float gasResistance = resultBME.gasResistance;
 
-  UsmanTFT_displayDataOnTFT(temperature, humidity, pressure, altitude, gasResistance);
+  UsmanTFT_displayDataOnTFT(resultBME.temperature, resultBME.humidity, resultBME.pressure, resultBME.altitude, resultBME.gasResistance);
 
   // Compares if Sensor-data has changed before sending
   // in order to only send changes in data
-  //TimIOT_MQTT_sendMatrikelnummerToHASS(matrikelnummerData, topicMatrikelnummer);
-
-  if (oldTemp != temperature) {
+  // using the resultBME struct 
+  if (oldTemp != resultBME.temperature) {
     // save the last time a message was sent
-    oldTemp = temperature;
-    TimIOT_MQTT_sendDataToHASS(temperature, topicTemp);
+    oldTemp = resultBME.temperature;
+    TimIOT_MQTT_sendDataToHASS(resultBME.temperature, topicTemp);
   }
-  if (oldHum != humidity) {
+  if (oldHum != resultBME.humidity) {
     // save the last time a message was sent
-    oldHum = humidity;
-    TimIOT_MQTT_sendDataToHASS(humidity, topicHum);
+    oldHum = resultBME.humidity;
+    TimIOT_MQTT_sendDataToHASS(resultBME.humidity, topicHum);
   }
-  if (oldPress != pressure) {
+  if (oldPress != resultBME.pressure) {
     // save the last time a message was sent
-    oldPress = pressure;
-    TimIOT_MQTT_sendDataToHASS(pressure, topicPress);
+    oldPress = resultBME.pressure;
+    TimIOT_MQTT_sendDataToHASS(resultBME.pressure, topicPress);
   }
-  if (oldGas != gasResistance) {
+  if (oldGas != resultBME.gasResistance) {
     // save the last time a message was sent
-    oldGas = gasResistance;
-    TimIOT_MQTT_sendDataToHASS(gasResistance, topicGas);
+    oldGas = resultBME.gasResistance;
+    TimIOT_MQTT_sendDataToHASS(resultBME.gasResistance, topicGas);
   }
 
   
   // Print to Serial Monitor
   Serial.print("Temperature: ");
-  Serial.print(temperature);
+  Serial.print(resultBME.temperature);
   Serial.print(" °C, Humidity: ");
-  Serial.print(humidity);
+  Serial.print(resultBME.humidity);
   Serial.print(" %, Pressure: ");
-  Serial.print(pressure);
+  Serial.print(resultBME.pressure);
   Serial.println("Gas Resistance:");
-  Serial.print(gasResistance);
+  Serial.print(resultBME.gasResistance);
   Serial.print("kOhm");
   Serial.println("");
 
