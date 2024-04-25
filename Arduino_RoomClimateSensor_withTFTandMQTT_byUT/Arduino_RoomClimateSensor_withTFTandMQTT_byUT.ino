@@ -117,7 +117,7 @@ void loop() {
 
 
 
-  // Adjust delay as needed
+  // Adjust delay as needed. Currently: 5sec
   delay(5000);  
 }
 
