@@ -38,7 +38,6 @@ void UsmanBME_setup(){
 // reads the current Room Climate and cleans the sensor using the heater
 void UsmanBME_readAndClean(){
   bme.performReading();
-  bme.setGasHeater(320, 150);
 
   float UsmanBME_temperature = bme.readTemperature();
   float UsmanBME_humidity = bme.readHumidity();
