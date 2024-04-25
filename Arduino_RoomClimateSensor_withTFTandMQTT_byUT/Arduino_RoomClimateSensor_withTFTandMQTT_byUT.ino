@@ -31,7 +31,6 @@ void setup() {
   TimIOT_MQTT_setupMQTT();
 
   TimIOT_MQTT_sendMatrikelnummerToHASS(matrikelnummerData, topicMatrikelnummer);
-}
 
 //    Void Loop here   //
 void loop() {
@@ -94,8 +93,6 @@ void loop() {
   Serial.print("kOhm");
   Serial.println("");
 
-
-
-  // Adjust delay as needed
+  // Adjust delay as needed. Currently: 5sec
   delay(5000);  
 }

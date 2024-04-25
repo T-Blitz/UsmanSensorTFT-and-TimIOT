@@ -104,7 +104,6 @@ void TimIOT_MQTT_setupMQTT() {
   Serial.println("You're connected to the MQTT broker!");
   Serial.print("Your MQTT-Client ID:");
   Serial.print(MQTT_ClientID);
-  Serial.print("MQTT_ClientID");
   Serial.println();
 }
 
