@@ -44,7 +44,7 @@ void loop() {
 
   // reads the current Room Climate and passes them in to a struct
   // using the struct "SensorDataBME", declared in UsmanBME.h for simple usage of data
-  SensorDataBME resultBME = UsmanBME_ReadingBME();
+  UsmanBME_SensorDataBME resultBME = UsmanBME_ReadingBME();
 
 
   // get The newly read Climate data and passes them in main loop
