@@ -1,15 +1,9 @@
-#include <Wire.h>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_BME680.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_ST7735.h>
+#include "UsmanBME.h"
+#include "UsmanTFT.h"
 
 // function library that handles WiFi and MQTT. Written by Tim Bli. using <WiFiS3.h> and <ArduinoMqttClient.h>
 #include "TimIOT.h"
 
-#define TFT_CS 10
-#define TFT_DC 9
-#define TFT_RST 8
 
 // used for comparing current measured data with last send data
 // 105 because it's and absured number, so that after each reboot a correct number is send to HA
@@ -20,24 +14,15 @@ float oldGas = 105;
 
 const char* matrikelnummerData = "";  //Pleas add your Matrikelnumber, char somehow needs to be number not a string
 
-Adafruit_BME680 bme;
-Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 
 // Void Setup here
 void setup() {
   // start Serial Monitor
   Serial.begin(9600);
 
-  if (!bme.begin()) {
-    Serial.println("Could not find a valid BME680 sensor, check wiring!");
-    while (1)
-      ;
-  }
 
-  // Initialize the display with a black tab
-  tft.initR(INITR_BLACKTAB); 
-  // Adjust the rotation as needed 
-  tft.setRotation(4);         
+  UsmanBME_setup();
+  UsmanTFT_setup();     
 
   // Setting up and connecting to WiFi, using "TimIOT.h"
   TimIOT_WiFi_setupWifi();
@@ -46,15 +31,6 @@ void setup() {
   TimIOT_MQTT_setupMQTT();
 
   TimIOT_MQTT_sendMatrikelnummerToHASS(matrikelnummerData, topicMatrikelnummer);
-  
-  //Set Oversampling and filter settings
-  bme.setTemperatureOversampling(BME680_OS_8X);
-  bme.setHumidityOversampling(BME680_OS_2X);
-  bme.setPressureOversampling(BME680_OS_4X);
-  bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
-  bme.setGasHeater(320, 150);
-}
-
 
 //    Void Loop here   //
 void loop() {
@@ -65,74 +41,58 @@ void loop() {
   TimIOT_WiFi_keepAlive();
   TimIOT_MQTT_keepAlive();
 
-    // Activate the heater
-  bme.performReading();
+  // reads the current Room Climate and passes them in to a struct
+  // using the struct "SensorDataBME", declared in UsmanBME.h for simple usage of data
+  UsmanBME_SensorDataBME resultBME = UsmanBME_ReadingBME();
 
-  float temperature = bme.readTemperature();
-  float humidity = bme.readHumidity();
-  float pressure = bme.readPressure() / 100.0;  // Convert to hPa
-  float altitude = bme.readAltitude(800);
-  // Convert to KOhms, later known as "voc" 
-  float gasResistance = bme.readGas() / 100.0;  
 
-  displayDataOnTFT(temperature, humidity, pressure, altitude, gasResistance);
+  // get The newly read Climate data and passes them in main loop
+  // leaving them for now, even though they are not needed anymore, since we can just use the struct
+  //float temperature = resultBME.temperature;
+  //float humidity = resultBME.humidity;
+  //float pressure = resultBME.pressure;
+  //float altitude = resultBME.altitude;
+  //float gasResistance = resultBME.gasResistance;
+
+  UsmanTFT_displayDataOnTFT(resultBME.temperature, resultBME.humidity, resultBME.pressure, resultBME.altitude, resultBME.gasResistance);
 
   // Compares if Sensor-data has changed before sending
   // in order to only send changes in data
-  //TimIOT_MQTT_sendMatrikelnummerToHASS(matrikelnummerData, topicMatrikelnummer);
-
-  if (oldTemp != temperature) {
+  // using the resultBME struct 
+  if (oldTemp != resultBME.temperature) {
     // save the last time a message was sent
-    oldTemp = temperature;
-    TimIOT_MQTT_sendDataToHASS(temperature, topicTemp);
+    oldTemp = resultBME.temperature;
+    TimIOT_MQTT_sendDataToHASS(resultBME.temperature, topicTemp);
   }
-  if (oldHum != humidity) {
+  if (oldHum != resultBME.humidity) {
     // save the last time a message was sent
-    oldHum = humidity;
-    TimIOT_MQTT_sendDataToHASS(humidity, topicHum);
+    oldHum = resultBME.humidity;
+    TimIOT_MQTT_sendDataToHASS(resultBME.humidity, topicHum);
   }
-  if (oldPress != pressure) {
+  if (oldPress != resultBME.pressure) {
     // save the last time a message was sent
-    oldPress = pressure;
-    TimIOT_MQTT_sendDataToHASS(pressure, topicPress);
+    oldPress = resultBME.pressure;
+    TimIOT_MQTT_sendDataToHASS(resultBME.pressure, topicPress);
   }
-  if (oldGas != gasResistance) {
+  if (oldGas != resultBME.gasResistance) {
     // save the last time a message was sent
-    oldGas = gasResistance;
-    TimIOT_MQTT_sendDataToHASS(gasResistance, topicGas);
+    oldGas = resultBME.gasResistance;
+    TimIOT_MQTT_sendDataToHASS(resultBME.gasResistance, topicGas);
   }
 
   
   // Print to Serial Monitor
   Serial.print("Temperature: ");
-  Serial.print(temperature);
+  Serial.print(resultBME.temperature);
   Serial.print(" °C, Humidity: ");
-  Serial.print(humidity);
+  Serial.print(resultBME.humidity);
   Serial.print(" %, Pressure: ");
-  Serial.print(pressure);
+  Serial.print(resultBME.pressure);
   Serial.println("Gas Resistance:");
-  Serial.print(gasResistance);
+  Serial.print(resultBME.gasResistance);
   Serial.print("kOhm");
   Serial.println("");
 
-
-
   // Adjust delay as needed. Currently: 5sec
   delay(5000);  
-}
-
-
-void displayDataOnTFT(float temp, float hum, float pressure, float altitude, float gasResistance) {
-  // Display data on TFT
-
-  tft.fillScreen(ST7735_WHITE);
-  tft.setTextSize(2);
-  tft.setCursor(2, 2);
-  tft.setTextColor(ST7735_BLUE);
-
-  tft.println("Temper: "); tft.print(temp); tft.println(" *C");
-  tft.print("Humidity: "); tft.print(hum); tft.println(" %");
-  tft.print("Pressure: "); tft.println(pressure);
-  tft.print("Altitude: "); tft.println(altitude);
-  tft.print("VOC: "); tft.println(gasResistance);
 }
