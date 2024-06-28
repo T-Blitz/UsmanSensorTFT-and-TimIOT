@@ -2,7 +2,9 @@
 #include "UsmanTFT.h"
 
 // function library that handles WiFi and MQTT. Written by Tim Bli. using <WiFiS3.h> and <ArduinoMqttClient.h>
-#include "TimIOT.h"
+#include "TimMQTT.h"
+
+
 
 
 // used for comparing current measured data with last send data
@@ -12,7 +14,6 @@ float oldHum = 105;
 float oldPress = 105;
 float oldGas = 105;
 
-const char* matrikelnummerData = "";  //Pleas add your Matrikelnumber, char somehow needs to be number not a string
 
 
 // Void Setup here
@@ -20,17 +21,17 @@ void setup() {
   // start Serial Monitor
   Serial.begin(9600);
 
-
-  UsmanBME_setup();
-  UsmanTFT_setup();     
-
+  // Setting up the BME680 Sensor using "UsmanBME.h"
+  usmanBME_setup();
+  // Setting up the TFT Display using "UsmanTFT.h"
+  usmanTFT_setup();     
   // Setting up and connecting to WiFi, using "TimIOT.h"
-  TimIOT_WiFi_setupWifi();
-
+  timWiFi_setupWiFi();
   // Setting up and connecting to MQTT, using "TimIOT.h"
-  TimIOT_MQTT_setupMQTT();
+  timMQTT_setupMQTT();
 
-  TimIOT_MQTT_sendMatrikelnummerToHASS(matrikelnummerData, topicMatrikelnummer);
+  // sending the students matrikelnumber once after IoT setup complition.
+  timMQTT_sendMatrikelnummer2Broker();
 }
 
 //    Void Loop here   //
@@ -39,12 +40,12 @@ void loop() {
   // using "TimIOT.h"
   // calling both, "Keep Alive", functions every loop.
   // To ensure a mentained Connection to both WiFi and MQTT Broker
-  TimIOT_WiFi_keepAlive();
-  TimIOT_MQTT_keepAlive();
+  timWiFi_keepAlive();
+  timMQTT_keepAlive();
 
   // reads the current Room Climate and passes them in to a struct
   // using the struct "SensorDataBME", declared in UsmanBME.h for simple usage of data
-  UsmanBME_SensorDataBME resultBME = UsmanBME_ReadingBME();
+  UsmanBME_SensorDataBME resultBME = usmanBME_ReadingBME();
 
 
   // get The newly read Climate data and passes them in main loop
@@ -55,7 +56,7 @@ void loop() {
   //float altitude = resultBME.altitude;
   //float gasResistance = resultBME.gasResistance;
 
-  UsmanTFT_displayDataOnTFT(resultBME.temperature, resultBME.humidity, resultBME.pressure, resultBME.altitude, resultBME.gasResistance);
+  usmanTFT_displayDataOnTFT(resultBME.temperature, resultBME.humidity, resultBME.pressure, resultBME.altitude, resultBME.gasResistance);
 
   // Compares if Sensor-data has changed before sending
   // in order to only send changes in data
@@ -63,22 +64,22 @@ void loop() {
   if (oldTemp != resultBME.temperature) {
     // save the last time a message was sent
     oldTemp = resultBME.temperature;
-    TimIOT_MQTT_sendDataToHASS(resultBME.temperature, topicTemp);
+    timMQTT_sendData2Broker(resultBME.temperature, topicTemp);
   }
   if (oldHum != resultBME.humidity) {
     // save the last time a message was sent
     oldHum = resultBME.humidity;
-    TimIOT_MQTT_sendDataToHASS(resultBME.humidity, topicHum);
+    timMQTT_sendData2Broker(resultBME.humidity, topicHum);
   }
   if (oldPress != resultBME.pressure) {
     // save the last time a message was sent
     oldPress = resultBME.pressure;
-    TimIOT_MQTT_sendDataToHASS(resultBME.pressure, topicPress);
+    timMQTT_sendData2Broker(resultBME.pressure, topicPress);
   }
   if (oldGas != resultBME.gasResistance) {
     // save the last time a message was sent
     oldGas = resultBME.gasResistance;
-    TimIOT_MQTT_sendDataToHASS(resultBME.gasResistance, topicGas);
+    timMQTT_sendData2Broker(resultBME.gasResistance, topicGas);
   }
 
   
