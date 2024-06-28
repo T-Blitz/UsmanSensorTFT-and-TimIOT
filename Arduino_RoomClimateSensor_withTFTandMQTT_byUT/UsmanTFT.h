@@ -1,7 +1,3 @@
-//#include <Wire.h>
-//#include <Adafruit_Sensor.h>
-//#include <Adafruit_BME680.h>
-//#include <Adafruit_GFX.h>
 #include <Adafruit_ST7735.h>
 
 // Function prototypes, they make things way easier
