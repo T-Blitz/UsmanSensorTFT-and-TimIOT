@@ -21,16 +21,16 @@ void setup() {
   // start Serial Monitor
   Serial.begin(9600);
 
-
-  UsmanBME_setup();
-  UsmanTFT_setup();     
-
+  // Setting up the BME680 Sensor using "UsmanBME.h"
+  usmanBME_setup();
+  // Setting up the TFT Display using "UsmanTFT.h"
+  usmanTFT_setup();     
   // Setting up and connecting to WiFi, using "TimIOT.h"
   timWiFi_setupWiFi();
-
   // Setting up and connecting to MQTT, using "TimIOT.h"
   timMQTT_setupMQTT();
 
+  // sending the students matrikelnumber once after IoT setup complition.
   timMQTT_sendMatrikelnummer2Broker();
 }
 
@@ -45,7 +45,7 @@ void loop() {
 
   // reads the current Room Climate and passes them in to a struct
   // using the struct "SensorDataBME", declared in UsmanBME.h for simple usage of data
-  UsmanBME_SensorDataBME resultBME = UsmanBME_ReadingBME();
+  UsmanBME_SensorDataBME resultBME = usmanBME_ReadingBME();
 
 
   // get The newly read Climate data and passes them in main loop
@@ -56,7 +56,7 @@ void loop() {
   //float altitude = resultBME.altitude;
   //float gasResistance = resultBME.gasResistance;
 
-  UsmanTFT_displayDataOnTFT(resultBME.temperature, resultBME.humidity, resultBME.pressure, resultBME.altitude, resultBME.gasResistance);
+  usmanTFT_displayDataOnTFT(resultBME.temperature, resultBME.humidity, resultBME.pressure, resultBME.altitude, resultBME.gasResistance);
 
   // Compares if Sensor-data has changed before sending
   // in order to only send changes in data

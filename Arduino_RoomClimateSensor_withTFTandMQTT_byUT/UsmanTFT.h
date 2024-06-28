@@ -5,8 +5,8 @@
 //#include <Adafruit_ST7735.h>
 
 // Function prototypes, they make things way easier
-void UsmanTFT_setup();
-void UsmanTFT_displayDataOnTFT(float temp, float hum, float pressure, float altitude, float gasResistance);
+void usmanTFT_setup();
+void usmanTFT_displayDataOnTFT(float temp, float hum, float pressure, float altitude, float gasResistance);
 
 #define TFT_CS 10
 #define TFT_DC 9
@@ -14,7 +14,7 @@ void UsmanTFT_displayDataOnTFT(float temp, float hum, float pressure, float alti
 
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 
-void UsmanTFT_setup(){
+void usmanTFT_setup(){
 
     // Initialize the display with a black tab
   tft.initR(INITR_BLACKTAB); 
@@ -24,7 +24,7 @@ void UsmanTFT_setup(){
 
 
 
-void UsmanTFT_displayDataOnTFT(float temp, float hum, float pressure, float altitude, float gasResistance) {
+void usmanTFT_displayDataOnTFT(float temp, float hum, float pressure, float altitude, float gasResistance) {
   // Display data on TFT
 
   tft.fillScreen(ST7735_WHITE);

@@ -18,16 +18,16 @@ struct UsmanBME_SensorDataBME {
 
 // Function prototypes, they make things way easier
 //declaration after the struct declaration, since the compiler does not know what "SensorDataBME" means otherwise 
-void UsmanBME_setup();
+void usmanBME_setup();
 
 // using name of the struct "SensorData" instead of "void" in function declaration since void can't return structs 
-UsmanBME_SensorDataBME UsmanBME_ReadingBME();
+UsmanBME_SensorDataBME usmanBME_ReadingBME();
 
 
 Adafruit_BME680 bme;
 
 
-void UsmanBME_setup(){
+void usmanBME_setup(){
 
   if (!bme.begin()) {
 
@@ -50,7 +50,7 @@ void UsmanBME_setup(){
 
 // reads the current Room Climate and saves them in a struct
 // then returns them for futher usage
-UsmanBME_SensorDataBME UsmanBME_ReadingBME(){
+UsmanBME_SensorDataBME usmanBME_ReadingBME(){
 
   // setting up the struct for in function usage
   UsmanBME_SensorDataBME dataBME;
