@@ -1,5 +1,6 @@
 #include <Adafruit_ST7735.h>
 
+
 // Function prototypes, they make things way easier
 void usmanTFT_setup();
 void usmanTFT_displayDataOnTFT(float temp, float hum, float pressure, float altitude, float gasResistance);

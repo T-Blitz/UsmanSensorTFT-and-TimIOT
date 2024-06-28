@@ -1,8 +1,6 @@
 #include <Adafruit_BME680.h>
 
 
-
-
 // creating struct with for easy passing of Climate data to the main loop
 struct UsmanBME_SensorDataBME { 
   float temperature;
