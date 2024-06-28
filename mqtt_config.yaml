@@ -1,31 +1,35 @@
   # Usman Sensors-0x
-  sensor:  
     - name: "UA-Sensor Temperature-0X"
-      state_topic: "stat/ua-sensor0x/temperature"
+      state_topic: "stat/student/0X/temperature"
       icon: mdi:thermometer
       # friendly_name: "UA-Sensor Temperature"
       unit_of_measurement: "*C"
 
     - name: "UA-Sensor Humidity-0X"
-      icon: mdi:thermometer-lines
-      state_topic: "stat/ua-sensor0x/humidity"
+      icon: mdi:water-percent
+      state_topic: "stat/student/0X/humidity"
       # friendly_name: "UA-Sensor Humidity"
       unit_of_measurement: "%"
 
     - name: "UA-Sensor Pressure-0X"
-      icon: mdi:water-percent
-      state_topic: "stat/ua-sensor0x/pressure"
-      # friendly_name: "UA-Sensor pressure?"
+      icon: mdi:thermometer-lines
+      state_topic: "stat/student/0X/pressure"
+      # friendly_name: "UA-Sensor pressure"
       unit_of_measurement: "hPa"
 
     - name: "UA-Sensor IAQ (gas)-0X"
       icon: mdi:image-filter-drama
-      state_topic: "stat/ua-sensor0x/gasResistance"
+      state_topic: "stat/student/0X/gasResistance"
       # friendly_name: "UA-Sensor IAQ"
       unit_of_measurement: "k0hm"
-      
+
+    - name: "UA-Sensor Altitude-0X"
+      icon: mdi:image-filter-hdr
+      state_topic: "stat/student/0X/altitude"
+      # friendly_name: "UA-Sensor Altitude"
+      unit_of_measurement: ":Altitude"
+
     - name: "UA-Sensor Name-0X"
-      icon: mdi:image-filter-drama
-      state_topic: "stat/ua-sensor0x/matrikelnummer"
+      state_topic: "stat/student/0X/matrikelnummer"
       # friendly_name: "UA-Sensor IAQ"
       unit_of_measurement: ":Matrikelnummer"
